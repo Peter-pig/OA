@@ -1,0 +1,17 @@
+server:
+  port: 9001
+spring:
+  datasource:
+    url: jdbc:mysql://43.134.18.178:3306/OaBusiness
+    password: 683huichao
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 43.134.18.178:8848
+  application:
+    name: oa-user
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
