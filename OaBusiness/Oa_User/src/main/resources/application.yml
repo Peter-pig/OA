@@ -1,6 +1,8 @@
 server:
   port: 9001
 spring:
+  main:
+    allow-bean-definition-overriding: true
   datasource:
     url: jdbc:mysql://43.134.18.178:3306/OaBusiness
     password: 683huichao

@@ -11,13 +11,15 @@ spring:
       globalcors:
         corsConfigurations:
           '[/**]':
-            allowedOrigins: "*"
+            allowedOrigins:
+              - http://localhost:8080
             allowedMethods:
               - GET
               - POST
               - PUT
               - DELETE
             allowedHeaders: "*"
+            allowedCredentials: true
       routes:
         - id: oa_user
           uri: lb://oa-user

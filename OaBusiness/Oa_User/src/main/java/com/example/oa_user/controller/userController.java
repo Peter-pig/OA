@@ -10,13 +10,16 @@ import com.example.commom.Entity.Roles;
 import com.example.commom.Entity.UserRoles;
 import com.example.commom.Entity.Users;
 import com.example.commom.Utils.JwtUtils;
+import com.example.commom.searchEntity.pwdInfo;
 import com.example.commom.searchEntity.userSearch;
 import com.example.oa_user.mapper.flexMapper;
 import com.example.oa_user.service.userRolesService;
 import com.example.oa_user.service.userService;
 
 import com.mybatisflex.core.paginate.Page;
+import io.jsonwebtoken.Claims;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -47,15 +50,15 @@ public class userController {
         }
         if (BcryptUtil.match(users.getPassword(), one.getPassword())) {
             UserRoles userRoles = userService.compareRole(one.getId());
-            String token = JwtUtils.generateToken(users.getName());
+            String token = JwtUtils.generateToken(users.getEmail());
             if (userRoles.getRoleId() == 1) {
                 HashMap<String, Object> data = new HashMap<>();
-                data.put("token",token);
+                data.put("token", token);
                 data.put("url", "/Admin");
                 return R.success(data);
             } else {
                 HashMap<String, Object> data = new HashMap<>();
-                data.put("token",token);
+                data.put("token", token);
                 data.put("url", "/normalUser");
                 return R.success(data);
             }
@@ -125,5 +128,50 @@ public class userController {
             e.printStackTrace();
             return R.error(500, "查询失败");
         }
+    }
+
+    @GetMapping("/userInfo")
+    public R userInfo(HttpServletRequest request) {
+        String header = request.getHeader("Authorization");
+        String token = header.replace("Bearer ", "");
+        Claims claims = JwtUtils.decodeToken(token);
+        String subject = claims.getSubject();
+        try {
+            LambdaQueryWrapper<Users> usersLambdaQueryWrapper = new LambdaQueryWrapper<>();
+            usersLambdaQueryWrapper.eq(Users::getEmail, subject);
+            Users one = userService.getOne(usersLambdaQueryWrapper);
+            HashMap<String, Object> data = new HashMap<>();
+            data.put("data", one);
+            return R.success(data);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error(500, "查询失败");
+        }
+
+    }
+
+    @PutMapping("/userUpdata")
+    public R userUpdata(@RequestBody Users users) {
+        try {
+            userService.updateById(users);
+            return R.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error(500, "修改失败");
+        }
+    }
+
+    @PutMapping("/updatePassword}")
+    public R updatePassword(@RequestBody pwdInfo pwdInfo, @RequestParam String email) {
+        QueryWrapper<Users> usersQueryWrapper = new QueryWrapper<>();
+        usersQueryWrapper.eq("email", email);
+        Users one = userService.getOne(usersQueryWrapper);
+        if (!BcryptUtil.match(one.getPassword(), pwdInfo.getConfirmPwd())) {
+            return R.error(500, "原密码输入错误");
+        }
+        String encrypt = BcryptUtil.encrypt(pwdInfo.getConfirmPwd());
+        one.setPassword(encrypt);
+        userService.updateById(one);
+        return R.success();
     }
 }
