@@ -9,10 +9,12 @@ import com.example.commom.Utils.BcryptUtil;
 import com.example.commom.Entity.Roles;
 import com.example.commom.Entity.UserRoles;
 import com.example.commom.Entity.Users;
+import com.example.commom.Utils.JwtUtils;
 import com.example.commom.searchEntity.userSearch;
 import com.example.oa_user.mapper.flexMapper;
+import com.example.oa_user.service.userRolesService;
 import com.example.oa_user.service.userService;
-import com.mybatisflex.core.BaseMapper;
+
 import com.mybatisflex.core.paginate.Page;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
@@ -29,8 +31,11 @@ import static com.example.commom.src.main.java.com.example.commom.Entity.table.T
 public class userController {
     @Resource
     userService userService;
-@Resource
-flexMapper flexMapper;
+    @Resource
+    userRolesService userRolesService;
+    @Resource
+    flexMapper flexMapper;
+
     @PostMapping("signIn")
     public R signIn(@RequestBody Users users) {
         String email = users.getEmail();
@@ -42,12 +47,15 @@ flexMapper flexMapper;
         }
         if (BcryptUtil.match(users.getPassword(), one.getPassword())) {
             UserRoles userRoles = userService.compareRole(one.getId());
+            String token = JwtUtils.generateToken(users.getName());
             if (userRoles.getRoleId() == 1) {
                 HashMap<String, Object> data = new HashMap<>();
+                data.put("token",token);
                 data.put("url", "/Admin");
                 return R.success(data);
             } else {
                 HashMap<String, Object> data = new HashMap<>();
+                data.put("token",token);
                 data.put("url", "/normalUser");
                 return R.success(data);
             }
@@ -66,7 +74,7 @@ flexMapper flexMapper;
                     .from(USERS)
                     .leftJoin(USER_ROLES)
                     .on(USERS.ID.eq(USER_ROLES.USER_ID));
-            Page<UsersDto> paginate = flexMapper.paginate(userSearch.getPage(), userSearch.getSize(), on);
+            Page<UsersDto> paginate = flexMapper.paginate(new Page<UsersDto>(userSearch.getPage(), userSearch.getSize()), on);
             HashMap<String, Object> data = new HashMap<>();
             data.put("data", paginate);
             return R.success(data);
@@ -93,9 +101,13 @@ flexMapper flexMapper;
     }
 
     @PutMapping("{id}")
-    public R edit(@PathVariable String id, @RequestBody Users users) {
+    public R edit(@PathVariable String id, @RequestBody UsersDto users) {
         try {
             users.setId(Integer.valueOf(id));
+            UserRoles userRoles = new UserRoles();
+            userRoles.setUserId(users.getId());
+            userRoles.setRoleId(users.getRoleId());
+            userRolesService.saveOrUpdate(userRoles);
             userService.updateById(users);
             return R.success();
         } catch (NumberFormatException e) {

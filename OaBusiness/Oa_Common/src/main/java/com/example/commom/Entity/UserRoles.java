@@ -1,5 +1,7 @@
 package com.example.commom.Entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.Table;
 import lombok.Data;
 
@@ -15,7 +17,7 @@ import java.io.Serializable;
 @Table("user_roles")
 public class UserRoles implements Serializable {
     private static final long serialVersionUID = 397745958829451278L;
-    
+    @TableId
     private Integer userId;
     
     private Integer roleId;
