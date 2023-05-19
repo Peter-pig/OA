@@ -175,4 +175,9 @@ public class userController {
         userService.updateById(one);
         return R.success();
     }
+
+    @GetMapping("AttendanceUser/{email}")
+    public UsersDto AttendanceUser(@PathVariable String email){
+    return userService.AttendanceUser(email);
+    }
 }

@@ -7,12 +7,14 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="Oa_Attendance" />
         <module name="Oa_Common" />
         <module name="Oa_GateWay" />
         <module name="Oa_User" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="Oa_Attendance" target="17" />
       <module name="Oa_Common" target="17" />
       <module name="Oa_GateWay" target="17" />
       <module name="Oa_User" target="17" />
@@ -21,6 +23,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Oa_Attendance" options="-parameters" />
       <module name="Oa_Common" options="-parameters" />
       <module name="Oa_GateWay" options="-parameters" />
       <module name="Oa_User" options="-parameters" />

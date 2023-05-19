@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/OA.iml" filepath="$PROJECT_DIR$/.idea/OA.iml" />
       <module fileurl="file://$PROJECT_DIR$/OaBusiness/OaBusiness.iml" filepath="$PROJECT_DIR$/OaBusiness/OaBusiness.iml" />
+      <module fileurl="file://$PROJECT_DIR$/OaBusiness/Oa_Attendance/Oa_Attendance.iml" filepath="$PROJECT_DIR$/OaBusiness/Oa_Attendance/Oa_Attendance.iml" />
       <module fileurl="file://$PROJECT_DIR$/OaBusiness/Oa_Common/Oa_Common.iml" filepath="$PROJECT_DIR$/OaBusiness/Oa_Common/Oa_Common.iml" />
       <module fileurl="file://$PROJECT_DIR$/OaBusiness/Oa_GateWay/Oa_GateWay.iml" filepath="$PROJECT_DIR$/OaBusiness/Oa_GateWay/Oa_GateWay.iml" />
       <module fileurl="file://$PROJECT_DIR$/OaBusiness/Oa_User/Oa_User.iml" filepath="$PROJECT_DIR$/OaBusiness/Oa_User/Oa_User.iml" />

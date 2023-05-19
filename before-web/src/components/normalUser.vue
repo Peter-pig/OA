@@ -2,6 +2,20 @@
   <div>
     <el-button @click="dialogVisible = true">个人信息</el-button>
     <el-button @click="pwdDialogVisible = true">修改密码</el-button>
+    <el-button @click="openDialog">打卡</el-button>
+    <el-dialog
+        :visible.sync="dialogVisible2"
+        title="打卡时间">
+      <el-date-picker
+          v-model="time"
+          type="datetime"
+          placeholder="选择日期时间">
+      </el-date-picker>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="punchCard">打卡</el-button>
+      </span>
+    </el-dialog>
     <el-dialog title="个人信息" :visible.sync="dialogVisible" width="50%">
       <el-form :model="userInfo" label-width="120px">
         <el-form-item label="Name">
@@ -55,6 +69,8 @@ export default {
         newPwd: "",
         confirmPwd: ""
       },
+      dialogVisible2: false,
+      time: '',
       userInfo: {
         name: "",
         email: "",
@@ -75,6 +91,35 @@ export default {
     this.getUserInfo();
   },
   methods: {
+    openDialog() {
+      this.dialogVisible2 = true;
+    },
+    async punchCard() {
+      // 打卡逻辑
+      const token = localStorage.getItem("token");
+
+      try {
+        const response = await axios.post("http://localhost:10000/api/attendance/punchIn", {
+            punchInTime:this.time
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 200) {
+          // 处理成功的打卡逻辑
+          console.log("打卡成功");
+          this.dialogVisible = false;
+        } else {
+          // 处理打卡失败的逻辑
+          console.log("打卡失败");
+        }
+      } catch (error) {
+        // 处理网络请求失败的逻辑
+        console.error(error);
+      }
+    },
     validateConfirmPwd(rule, value, callback) {
       if (value === this.pwdInfo.oldPwd) {
         callback(new Error('新密码不能与原密码相同!'));

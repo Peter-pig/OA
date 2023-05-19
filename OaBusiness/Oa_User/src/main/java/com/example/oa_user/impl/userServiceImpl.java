@@ -1,6 +1,7 @@
 package com.example.oa_user.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.commom.DTO.UsersDto;
 import com.example.commom.Entity.Roles;
 import com.example.commom.Entity.UserRoles;
 import com.example.commom.Entity.Users;
@@ -25,6 +26,11 @@ public class userServiceImpl extends ServiceImpl<userMapper, Users> implements u
     @Override
     public List<Roles> getRoles() {
         return userMapper.getRoles();
+    }
+
+    @Override
+    public UsersDto AttendanceUser(String email) {
+        return userMapper.AttendanceUser(email);
     }
 
 

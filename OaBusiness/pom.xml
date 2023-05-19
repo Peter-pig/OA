@@ -15,6 +15,7 @@
     <modules>
         <module>Oa_GateWay</module>
         <module>Oa_User</module>
+        <module>Oa_Attendance</module>
         <module>Oa_Common</module>
     </modules>
     <name>OaBusiness</name>

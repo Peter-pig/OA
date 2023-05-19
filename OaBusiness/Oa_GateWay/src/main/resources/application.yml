@@ -25,3 +25,7 @@ spring:
           uri: lb://oa-user
           predicates:
             - Path=/api/user/**
+        - id: oa_attendance
+          uri: lb://oa-attendance
+          predicates:
+            - Path=/api/attendance/**
