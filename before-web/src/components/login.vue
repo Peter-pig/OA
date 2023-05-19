@@ -34,13 +34,16 @@ export default {
     };
   },
   methods: {
-    async submitForm(formName) {
+    async submitForm() {
       try {
         const response = await axios.post("http://localhost:10000/api/user/signIn", this.loginForm);
         console.log(response)
-        if (response.status === 200) {
+        if (response.data.code === 200) {
+          this.$message.success("welcome "+ this.loginForm.email);
           localStorage.setItem("token",response.data.data.token);
           this.$router.push(response.data.data.url);
+        }else if (response.data.code === 500){
+          this.$message.error("login fail");
         }
       } catch (error) {
         console.error(error);

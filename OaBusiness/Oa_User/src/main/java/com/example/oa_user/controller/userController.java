@@ -39,6 +39,7 @@ public class userController {
     @Resource
     flexMapper flexMapper;
 
+
     @PostMapping("signIn")
     public R signIn(@RequestBody Users users) {
         String email = users.getEmail();
@@ -161,12 +162,12 @@ public class userController {
         }
     }
 
-    @PutMapping("/updatePassword}")
-    public R updatePassword(@RequestBody pwdInfo pwdInfo, @RequestParam String email) {
+    @PutMapping("/changePassword")
+    public R updatePassword(@RequestParam String email,@RequestBody pwdInfo pwdInfo ) {
         QueryWrapper<Users> usersQueryWrapper = new QueryWrapper<>();
         usersQueryWrapper.eq("email", email);
         Users one = userService.getOne(usersQueryWrapper);
-        if (!BcryptUtil.match(one.getPassword(), pwdInfo.getConfirmPwd())) {
+        if (!BcryptUtil.match( pwdInfo.getOldPwd(),one.getPassword())) {
             return R.error(500, "原密码输入错误");
         }
         String encrypt = BcryptUtil.encrypt(pwdInfo.getConfirmPwd());

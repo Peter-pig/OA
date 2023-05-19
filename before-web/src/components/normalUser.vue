@@ -14,7 +14,7 @@
           <el-input v-model="userInfo.position"></el-input>
         </el-form-item>
         <el-form-item label="Phone Number">
-          <el-input v-model="userInfo.phoneNumber"></el-input>
+          <el-input v-model="userInfo.contact"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="updateUserInfo()">Update</el-button>
@@ -59,7 +59,7 @@ export default {
         name: "",
         email: "",
         position: "",
-        phoneNumber: ""
+        contact: ""
       }, rules: {
         newPwd: [
           {required: true, message: '请填写新密码', trigger: 'blur'},
@@ -97,7 +97,7 @@ export default {
             this.$message.success("Password update successful.");
             this.pwdDialogVisible = false;
           }else if (response.data.code === 500){
-            this.$message.success("Password update fail.");
+            this.$message.error("Password update fail.");
           }
         } catch (error) {
           console.error(error);
